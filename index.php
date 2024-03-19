@@ -1,9 +1,45 @@
 <?php
 
-$lowerPass = ['a b c d e f g h i j k l m n o p q r s t u v w x y z'];
-$upperPass = ['ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
-$numberPass = ['012345678910'];
-$specialPass = ['!"£$%&/()=?^']
+include './functions.php';
+
+session_start();
+
+$lowerPass = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+$upperPass = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+$numberPass = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+$specialPass = ['!', '"', '#', '$', '%', '&', '/', '(', ')', '=', '?', '^'];
+
+$passwordLength=8;
+$selectedChars = [];
+
+if (isset($_GET['lowerPass']) || isset($_GET['upperPass']) || isset($_GET['numberPass']) || isset($_GET['specialPass'])) {
+    $selectedChars = [];
+    if (isset($_GET['lowerPass'])) {
+      $selectedChars = array_merge($selectedChars, $lowerPass);
+    }
+    if (isset($_GET['upperPass'])) {
+      $selectedChars = array_merge($selectedChars, $upperPass);
+    }
+    if (isset($_GET['numberPass'])) {
+      $selectedChars = array_merge($selectedChars, $numberPass);
+    }
+    if (isset($_GET['specialPass'])) {
+      $selectedChars = array_merge($selectedChars, $specialPass);
+    }
+};
+
+
+
+if(isset($_GET['password'])){
+    $findPass =  MixPassword($selectedChars, $passwordLength);
+
+    $_SESSION['showPass'] = $findPass;
+    header('Location : ./results.php');
+    
+}
+
+$password = MixPassword($selectedChars, $passwordLength);
+
 
 
 
@@ -26,39 +62,34 @@ $specialPass = ['!"£$%&/()=?^']
 
         <h1 class="text-center">Genera la tua password</h1>
 
-        <form action="GET">
-        
-            <input type="checkbox"  name="upperPass" >
-            <label name="parking"> Password di Lettere Maiuscole </label><br>
-            
-            
-        </form>
-
-        <form action="GET">
-        
-            <input type="checkbox"  name="lowerPass" >
-            <label name="parking"> Password di Lettere Minuscole</label><br>
-            
-            
-        </form>
-
-        <form action="GET">
-        
-            <input type="checkbox"  name="numberPass" >
-            <label name="parking"> Password di Numeri</label><br>
-            
-            
-        </form>
-
-        <form action="GET">
-        
-            <input type="checkbox"  name="specialPass" >
-            <label name="parking"> Password di Caretteri speciali</label><br>
-            
-        </form>
-        
+        <form  method="GET"> 
+            <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="upperPass" name="upperPass" value="true">
+            <label class="form-check-label" for="upperPass"> Lettere Maiuscole </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="lowerPass" name="lowerPass" value="true">
+            <label class="form-check-label" for="lowerPass"> Lettere Minuscole </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="numberPass" name="numberPass" value="true">
+            <label class="form-check-label" for="numberPass"> Numeri </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="specialPass" name="specialPass" value="true">
+            <label class="form-check-label" for="specialPass"> Caratteri Speciali </label>
+        </div>
+        <br>
         <button type="submit" class="btn btn-danger mb-3">Genera Password</button>
-        <input type="text" name="" id=""  minlength="4" maxlength="8" >
+        
+         
+
+
+        </form>
+
+        <?php
+            echo "<p class='alert alert-success'>La password che hai generato è: <strong>$password</strong></p>";
+        ?>
        
 
 
@@ -78,4 +109,5 @@ $specialPass = ['!"£$%&/()=?^']
 </body>
 
 </html>
+
 
